@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cab and Driver Management</title>
+    <script src="authorization.js" defer></script>
+</head>
+<body>
+
+<h2>Cab and Driver Management</h2>
+
+<!-- Add Cab Section -->
+
+<h3>Add New Cab</h3>
+<form id="addCabForm">
+    <label for="cabNo">Cab No:</label>
+    <input type="text" id="cabNo" name="cabNo" pattern="[^\s]+" required>
+    <input type="number" id="availableSeat" name="availableSeat"  style="visibility: hidden;" >
+
+    <label for="seatingCapacity">Seating Capacity:</label>
+    <input type="number" id="seatingCapacity" name="seatingCapacity" required>
+
+    <label for="colour">Cab Colour:</label>
+    <input type="text" id="colour" name="colour" pattern="[^\s]+" required>
+
+    <label for="availableForBooking">Available for Booking:</label>
+    <input type="checkbox" id="availableForBooking" name="availableForBooking">
+
+
+
+    <button type="button" onclick="addCab()">Add Cab</button>
+</form>
+
+<!-- Response for Add Cab -->
+<div id="responseCabOutput"></div>
+
+<script>
+    function addCab() {
+    const form = document.getElementById('addCabForm');
+    const formData = new FormData(form);
+    const jsonData = {};
+
+    const seatingCapacityInput = document.getElementById('seatingCapacity');
+    console.log('seatingcapacity', parseInt(seatingCapacityInput.value, 10) - 1);
+
+    formData.forEach((value, key) => {
+        jsonData[key] = value;
+        jsonData['availableSeat'] = parseInt(seatingCapacityInput.value, 10) - 1;
+         jsonData[key] = key === 'availableForBooking' ? form.elements[key].checked : value;
+    });
+
+    fetch('api/v1/cabs', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(jsonData),
+    })
+    .then(response => {
+        return response.json();
+    })
+    .then(data => {
+          if(data.status==='Failed'){
+         window.alert('This cabno already register!');
+         }
+         else{
+         window.alert(data.message);
+          window.location.reload();
+        }
+        form.reset();
+        console.log('Response Content:', data);
+            const newTab = window.open('cablist.html', '_blank');
+            if (newTab) {
+                newTab.focus();
+            }
+    })
+    .catch((error) => {
+        console.error('Fetch Error:', error);
+        // Handle other errors, e.g., show an error message
+    });
+}
+</script>
+
+<!-- Add Driver Section -->
+
+<h3>Add New Driver</h3>
+<form id="addDriverForm">
+    <label for="driverName">Driver Name:</label>
+    <input type="text" id="driverName" name="driverName" required>
+
+    <label for="driverNo">Driver MobileNo:</label>
+    <input type="text" id="driverNo" name="driverNo" pattern="[0-9]{10}"  required>
+
+    <label for="driverCabNo">Cab ID:</label>
+    <select id="driverCabNo" name="assignedCabId" required></select>
+
+    <button type="button" onclick="validateKeyPress()">Add Driver</button>
+</form>
+
+<!-- Response for Add Driver -->
+<div id="cabInfoContainer"></div>
+
+<script>
+    function validateKeyPress() {
+    var regMobile = document.getElementById('driverNo').value;
+    var regMobilePattern = /^[0-9]{10}$/;
+
+    if (!regMobilePattern.test(regMobile)) {
+        alert('Please enter a valid 10-digit mobile number.');
+        return false;
+    }
+
+    return addDriver();
+}
+
+    function addDriver() {
+        const form = document.getElementById('addDriverForm');
+        const formData = new FormData(form);
+        const jsonData = {};
+
+        formData.forEach((value, key) => {
+            jsonData[key] = value;
+        });
+
+        fetch('api/v1/drivers', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(jsonData),
+        })
+         .then(response => {
+        console.log('Response Status:', response.status);
+        return response.json();
+         })
+        .then(data => {
+         if(data.status==='Failed'){
+         window.alert('This driver phoneno or cabid is invalid');
+         }
+         else{
+         window.alert(data.message);
+         window.location.reload();
+        }
+        form.reset();
+           console.log('Response Content:', data);
+            try {
+        const newTab = window.open('driverlist.html', '_blank');
+        if (newTab) {
+            newTab.focus();
+        } else {
+            throw new Error('Unable to open new tab');
+        }
+    } catch (error) {
+        console.error('Error opening new tab:', error);
+    }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            // Handle error, e.g., show an error message
+        });
+    }
+</script>
+
+<script src="dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pheonix</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="authorization.js" defer></script>
+</head>
+<body>
+
+<h2>Cab Booking</h2>
+<div class="container" id="container">
+    <div class="form-container sign-up-container">
+        <form id="addUserForm" onsubmit="return addUser()"  accept-charset="UTF-8">
+            <h1>Create Account</h1>
+            <div class="social-container">
+                <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+            <span>or use your below for registration</span>
+            <input type="text" placeholder="Name" name="username"  id="username" required />
+            <input type="text" placeholder="Mobileno" name="phoneNo" id="regMobile"   required />
+            <input type="password" placeholder="Password" name="password" id="password"  required />
+
+            <label for="gender">Gender:
+            <select id="gender" name="gender" required>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select></label>
+            <input type="text" placeholder="Role" name="role" id="role" value="customer" readonly style="visibility: hidden;" />
+            <button type="submit">Sign Up</button>
+        </form>
+    </div>
+
+    <div class="form-container sign-in-container">
+        <form  onsubmit="return loginUser()" >
+            <h1>Sign in</h1>
+            <div class="social-container">
+                <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+            <span>or use your account</span>
+            <input type="text" placeholder="Mobileno" name="Mobileno" id="loginMobile" />
+            <input type="password" placeholder="Password" id="loginPassword" name="Password" />
+            <a href="#">Forgot your password?</a>
+            <button type="submit">Sign In</button>
+        </form>
+    </div>
+    <div class="overlay-container">
+        <div class="overlay">
+            <div class="overlay-panel overlay-left">
+                <h1>Welcome Back!</h1>
+                <p>To keep connected with us please login with your personal info</p>
+                <button class="ghost" id="signIn">Sign In</button>
+            </div>
+            <div class="overlay-panel overlay-right">
+                <h1>Hello, Friend!</h1>
+                <p>Enter your personal details and start the journey with us</p>
+                <button class="ghost" id="signUp">Sign Up</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>
+        Created with <i class="fa fa-heart"></i> by Tamil Muhilan
+    </p>
+</footer>
+
+<script src="login.js"></script>
+
+</body>
+</html>

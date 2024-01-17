@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ride Booking</title>
+    <link rel="stylesheet" type="text/css" href="booking.css">
+    <script src="authorization.js" defer></script>
+</head>
+<body>
+
+<h2>Ride Booking</h2>
+
+<div class="container">
+    <form id="bookingForm" onsubmit="bookRide(); return false;">
+
+        <label for="pickPoint">Pickup Point:</label>
+        <select id="pickPoint" name="pickPoint" required></select>
+        <label for="dropPoint">Drop Point:</label>
+          <select id="dropPoint" name="dropPoint" required></select>
+
+        <button type="submit">Book Ride</button>
+    </form>
+
+    <div id="bookingStatus"></div>
+</div>
+
+<script src="booking.js"></script>
+
+</body>
+</html>

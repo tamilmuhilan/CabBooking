@@ -1,0 +1,134 @@
+<xml>
+CREATE TABLE usertable(
+		userid INT PRIMARY KEY AUTO_INCREMENT,
+		username VARCHAR(30) NOT NULL UNIQUE ,
+		password VARCHAR(30) NOT NULL,
+		gender VARCHAR(30) NOT NULL,
+		phoneno BIGINT UNIQUE,
+		role VARCHAR(30) NOT NULL,
+		apikey VARCHAR(60) UNIQUE
+		);
+
+		CREATE TABLE cabtable(
+		cabid INT PRIMARY KEY AUTO_INCREMENT,
+		cabno VARCHAR(30) NOT NULL UNIQUE,
+		colour VARCHAR(30) NOT NULL,
+		seatingcapacity INT,
+		availableseat INT,
+		availableforbooking BOOLEAN,
+		driverassigned BOOLEAN
+		);
+
+		ALTER TABLE drivertable
+		ADD CONSTRAINT FK_CabId FOREIGN KEY(assignedcabid) REFERENCES cabtable(cabid)  ON DELETE set NULL  ON UPDATE set null
+
+		ALTER TABLE drivertable
+		DROP FOREIGN KEY FK_cabId;
+
+
+		ALTER TABLE cabbooking.drivertable DROP FOREIGN KEY FK_CabId;
+
+		CREATE TABLE drivertable(
+		driverid INT PRIMARY KEY AUTO_INCREMENT,
+		drivername VARCHAR(30) NOT NULL,
+		assignedcabid INT,
+		driverno BIGINT UNIQUE,
+		CONSTRAINT FK_CabId FOREIGN KEY(assignedcabid) REFERENCES cabtable(cabid)
+		ON DELETE SET NULL ON UPDATE SET NULL
+		);
+
+		CREATE TABLE bookingtable (
+		bookid INT ,
+		cabid INT,
+		driverid INT,
+		pickpoint INT,
+		droppoint INT,
+		CONSTRAINT FK_bk_DriverId FOREIGN KEY(driverid) REFERENCES drivertable(driverid),
+		CONSTRAINT FK_bk_CabId FOREIGN KEY(cabid) REFERENCES cabtable(cabid)
+		);
+
+		CREATE TABLE bookingdetailtable (
+		bookid INT ,
+		cabid INT,
+		username VARCHAR(30) NOT NULL ,
+		userid INT ,
+		pickpoint INT,
+		droppoint INT,
+		booktime DATETIME,
+		CONSTRAINT FK_dtl_UserId FOREIGN KEY(userid) REFERENCES usertable(userid),
+		CONSTRAINT FK_dtl_CabId FOREIGN KEY(cabid) REFERENCES cabtable(cabid)
+
+		)
+
+		CREATE TABLE locations (
+		id INT PRIMARY KEY,
+		location_name VARCHAR(255)
+		);
+
+		INSERT INTO locations (id, location_name) VALUES
+		(1, 'Estancia'),
+		(2, 'Guduvancheri'),
+		(3, 'Urappakkam'),
+		(4, 'Vandalur'),
+		(5, 'Perungulattur'),
+		(6, 'Tambaram'),
+		(7, 'Chrompet'),
+		(8, 'Pallavaram'),
+		(9, 'Tirusulam');
+
+
+
+		ALTER TABLE drivertable
+		DROP FOREIGN KEY FK_CabId;
+
+
+
+		DROP table cabtable;
+		DROP table drivertable;
+		DROP table bookingtable;
+		DROP  table bookingdetailtable;
+
+		SET foreign_key_checks = 0;
+		DROP table drivertable;
+		SET foreign_key_checks = 1;
+
+		update cabtable set availableseat=3,availableforbooking=1 WHERE cabid=2
+
+		update usertable set username='vijay',password='',gender='',phoneno=67,role='' where userid=?
+
+		DELETE FROM usertable where userid=8;
+		delete from drivertable where driverid=1;
+
+		SELECT * from usertable u ;
+		select * from drivertable;
+		select * from cabtable c;
+		SELECT * from locations
+
+
+		SELECT * from bookingdetailtable b
+		select * from bookingtable
+		update bookingtable SET pickpoint=1 where bookid=1
+
+
+		select a.cabid as cabid,b.driverid as driverid,a.availableseat as availableseat,a.seatingCapacity as seatingCapacity
+		from cabtable a left join drivertable b on b.assignedCabId=a.cabid
+		where a.availableforbooking=true and a.availableseat!=0
+		order by a.cabid,a.availableseat limit 1
+
+		select a.cabid as cabid,b.driverid as driverid,a.availableseat as availableseat,a.seatingCapacity as seatingCapacity
+		from cabtable a left join drivertable b on b.assignedCabId=a.cabid
+		where a.availableforbooking=true and a.availableseat!=0 and a.seatingCapacity=a.availableseat
+		order by a.cabid,a.availableseat limit 1
+
+		select a.bookid bookid,c.cabno cabno,d.drivername drivername,d.driverno driverno,pickloc.location_name pickpoint,droploc.location_name droppoint,
+		b.booktime bookingtime,b.userid userid
+		from bookingtable a
+		left join bookingdetailtable b  on a.bookid =b.bookid
+		left join cabtable c on a.cabid=c.cabid
+		left JOIN drivertable d on a.driverid =d.driverid
+		left join locations pickloc on b.pickpoint=pickloc.id
+		left join locations droploc on b.droppoint =droploc.id
+		where b.userid=1
+
+
+</xml>
